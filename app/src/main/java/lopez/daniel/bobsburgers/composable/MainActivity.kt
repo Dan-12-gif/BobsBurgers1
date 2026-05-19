@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -26,6 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    // Aquí llamamos a la pantalla que jala toda la API
                     CharacterListScreen()
                 }
             }
@@ -35,13 +35,16 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CharacterListScreen(viewModel: CharacterViewModel = viewModel()) {
+    // Aquí revisamos en qué estado está la petición a la API
     when {
         viewModel.isLoading -> {
+            // Mientras descarga los personajes de la API, muestra un círculo de carga
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
         viewModel.errorMessage != null -> {
+            // Si el celular no tiene internet o la API falla, muestra el error
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(
                     text = "Error: ${viewModel.errorMessage}",
@@ -50,6 +53,7 @@ fun CharacterListScreen(viewModel: CharacterViewModel = viewModel()) {
             }
         }
         else -> {
+            // Si la descarga fue exitosa, dibuja la lista completa de la API
             LazyColumn(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -64,11 +68,13 @@ fun CharacterListScreen(viewModel: CharacterViewModel = viewModel()) {
 
 @Composable
 fun CharacterCard(character: Character) {
+    // El diseño de cada tarjeta individual
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(modifier = Modifier.padding(16.dp)) {
+            // Coil jala la imagen directamente desde la URL de la API
             AsyncImage(
                 model = character.image,
                 contentDescription = "Imagen de ${character.name}",
@@ -94,52 +100,6 @@ fun CharacterCard(character: Character) {
                     text = "Primer Episodio: ${character.firstEpisode ?: "N/A"}",
                     style = MaterialTheme.typography.bodySmall
                 )
-            }
-        }
-    }
-}
-
-// ==========================================
-// VISTAS PREVIAS (PREVIEWS)
-// ==========================================
-
-@Preview(showBackground = true, name = "Vista de Tarjeta")
-@Composable
-fun CharacterCardPreview() {
-    val dummyCharacter = Character(
-        id = 1,
-        name = "Bob Belcher",
-        gender = "Masculino",
-        image = "https://bobsburgers-api.herokuapp.com/images/characters/1.jpg",
-        firstEpisode = "\"Human Flesh\""
-    )
-
-    MaterialTheme {
-        Box(modifier = Modifier.padding(16.dp)) {
-            CharacterCard(character = dummyCharacter)
-        }
-    }
-}
-
-@Preview(showBackground = true, name = "Vista de Lista Completa", showSystemUi = true)
-@Composable
-fun CharacterListPreview() {
-    val dummyList = listOf(
-        Character(1, "Bob Belcher", "Masculino", "", "\"Human Flesh\""),
-        Character(2, "Linda Belcher", "Femenino", "", "\"Human Flesh\""),
-        Character(3, "Tina Belcher", "Femenino", "", "\"Human Flesh\""),
-        Character(4, "Gene Belcher", "Masculino", "", "\"Human Flesh\""),
-        Character(5, "Louise Belcher", "Femenino", "", "\"Human Flesh\""),
-        Character(6, "Teddy", "Masculino", "", "\"Crawl Space\"")
-    )
-
-    MaterialTheme {
-        LazyColumn(
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(dummyList) { character ->
-                CharacterCard(character)
             }
         }
     }
