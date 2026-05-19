@@ -127,8 +127,10 @@ fun CharacterListPreview() {
     val dummyList = listOf(
         Character(1, "Bob Belcher", "Masculino", "", "\"Human Flesh\""),
         Character(2, "Linda Belcher", "Femenino", "", "\"Human Flesh\""),
-        Character(3, "Tina Belcher", "Femenino", "", "\"Human Flesh\"")
-        
+        Character(3, "Tina Belcher", "Femenino", "", "\"Human Flesh\""),
+        Character(4, "Gene Belcher", "Masculino", "", "\"Human Flesh\""),
+        Character(5, "Louise Belcher", "Femenino", "", "\"Human Flesh\""),
+        Character(6, "Teddy", "Masculino", "", "\"Crawl Space\"")
     )
 
     MaterialTheme {
